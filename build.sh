@@ -1,6 +1,8 @@
 #!/bin/bash
 # Сборка OpenWrt 25.12.5 для Vinga WR-AC1210GU. Запускать из этой папки.
 set -e
+# права файлов в образе 644/755 независимо от umask системы (Ubuntu даёт 002 → 664)
+umask 022
 HERE="$(cd "$(dirname "$0")" && pwd)"
 TAG=v25.12.5
 
