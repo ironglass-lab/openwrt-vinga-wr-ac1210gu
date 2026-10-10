@@ -9,7 +9,7 @@ index 0000000..4275d2b
 + * Vinga WR-AC1210GU (ODM: JCG JIR-AC680M)
 + * MT7621A, 256 MB DDR3, 16 MB SPI-NOR (mod), single MT7615 DBDC (2.4 + 5 GHz)
 + * Based on jcg_jhr-ac876m (same layout) and glinet_gl-mt1300 (single MT7615 DBDC).
-+ * GPIO map measured on the board, see Vinga_WR-AC1210GU_hardware.txt.
++ * GPIO map measured on the board, see README.md (sections 6-7).
 + */
 +
 +#include "mt7621.dtsi"
