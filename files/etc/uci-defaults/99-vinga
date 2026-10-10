@@ -1,0 +1,36 @@
+#!/bin/sh
+# Vinga WR-AC1210GU: выполняется один раз после прошивки/сброса настроек
+
+# ускорение: flow offloading (программный + аппаратный PPE), packet steering
+uci -q set firewall.@defaults[0].flow_offloading='1'
+uci -q set firewall.@defaults[0].flow_offloading_hw='1'
+uci -q set network.globals.packet_steering='1'
+
+# Wi-Fi: страна UA, 5G 80 МГц
+[ -s /etc/config/wireless ] || wifi config
+uci -q set wireless.radio0.country='UA'
+uci -q set wireless.radio1.country='UA'
+uci -q set wireless.radio1.htmode='VHT80'
+
+# IPv6 выключен по умолчанию (включается из LuCI)
+uci -q set network.wan6.auto='0'
+uci -q set network.wan.ipv6='0'
+uci -q delete network.lan.ip6assign
+uci -q delete network.globals.ula_prefix
+uci -q set dhcp.lan.ra='disabled'
+uci -q set dhcp.lan.dhcpv6='disabled'
+
+# WAN: молча отбрасывать, на ping не отвечать (как на padavan)
+for z in $(uci show firewall | sed -n "s/^firewall\.\(@zone\[[0-9]*\]\)\.name='wan'$/\1/p"); do
+	uci set firewall.$z.input='DROP'
+	uci set firewall.$z.forward='DROP'
+done
+for r in $(uci show firewall | sed -n "s/^firewall\.\(@rule\[[0-9]*\]\)\.name='Allow-Ping'$/\1/p"); do
+	uci set firewall.$r.enabled='0'
+done
+
+uci commit firewall
+uci commit network
+uci commit wireless
+uci commit dhcp
+exit 0

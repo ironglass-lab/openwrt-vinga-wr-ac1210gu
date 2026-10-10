@@ -1,0 +1,32 @@
+#!/bin/sh
+# Vinga: короткое нажатие ничего не делает,
+# держать >= 15 с — сброс настроек (через 15 с WPS начинает мигать — можно отпускать)
+
+. /lib/functions.sh
+
+OVERLAY="$( grep ' /overlay ' /proc/mounts )"
+
+case "$ACTION" in
+pressed)
+	[ -z "$OVERLAY" ] && return 0
+
+	# подсветка: WPS горит, пока держишь (через 15 с начнёт мигать — можно отпускать)
+	echo none > /sys/class/leds/blue:wps/trigger; echo 1 > /sys/class/leds/blue:wps/brightness
+	return 15
+;;
+timeout)
+	. /etc/diag.sh
+	set_state failsafe
+;;
+released)
+	if [ "$SEEN" -ge 15 -a -n "$OVERLAY" ]
+	then
+		echo "FACTORY RESET" > /dev/console
+		factoryreset -y && reboot &
+	else
+		echo 0 > /sys/class/leds/blue:wps/brightness
+	fi
+;;
+esac
+
+return 0

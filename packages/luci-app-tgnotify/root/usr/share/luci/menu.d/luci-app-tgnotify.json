@@ -1,0 +1,14 @@
+{
+	"admin/services/tgnotify": {
+		"title": "Telegram",
+		"order": 90,
+		"action": {
+			"type": "view",
+			"path": "tgnotify"
+		},
+		"depends": {
+			"acl": [ "luci-app-tgnotify" ],
+			"uci": { "tgnotify": true }
+		}
+	}
+}

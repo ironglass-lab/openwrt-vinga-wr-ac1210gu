@@ -1,0 +1,21 @@
+#!/bin/sh
+# Vinga: кнопка WPS с подсветкой (замена штатного обработчика wifi-scripts)
+#   нажал — WPS горит; держишь 2 с — WPS часто мигает (отпустишь = 2.4G вкл/выкл);
+#   отпустил — WPS гаснет, действие выполняет /etc/rc.wps/10-vinga
+L=/sys/class/leds/blue:wps
+case "$ACTION" in
+pressed)
+	echo none > $L/trigger; echo 1 > $L/brightness
+	exit 2
+	;;
+timeout)
+	echo timer > $L/trigger; echo 100 > $L/delay_on; echo 100 > $L/delay_off
+	;;
+released)
+	echo none > $L/trigger; echo 0 > $L/brightness
+	;;
+esac
+for script in /etc/rc.wps/*; do
+	[ -x "$script" ] || continue
+	"$script" && break
+done

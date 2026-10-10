@@ -1,0 +1,29 @@
+#!/bin/sh /etc/rc.common
+# Расписание Wi-Fi: при выключенном таймере возвращает сети, которые он выключил
+
+START=99
+USE_PROCD=1
+PROG=/usr/bin/wifitimer
+
+start_service() {
+	local en
+	config_load wifitimer
+	config_get_bool en main enabled 0
+	if [ "$en" != 1 ]; then
+		$PROG restore
+		return 0
+	fi
+	procd_open_instance
+	procd_set_param command $PROG daemon
+	procd_set_param respawn
+	procd_close_instance
+}
+
+reload_service() {
+	stop
+	start
+}
+
+service_triggers() {
+	procd_add_reload_trigger wifitimer
+}

@@ -1,0 +1,102 @@
+CONFIG_TARGET_ramips=y
+CONFIG_TARGET_ramips_mt7621=y
+CONFIG_TARGET_ramips_mt7621_DEVICE_vinga_wr-ac1210gu=y
+CONFIG_PACKAGE_luci=y
+CONFIG_LUCI_LANG_ru=y
+CONFIG_LUCI_LANG_uk=y
+# --- флешка и ФС ---
+CONFIG_PACKAGE_block-mount=y
+CONFIG_PACKAGE_kmod-usb-storage=y
+CONFIG_PACKAGE_kmod-usb-storage-uas=y
+CONFIG_PACKAGE_kmod-fs-ext4=y
+CONFIG_PACKAGE_kmod-fs-vfat=y
+CONFIG_PACKAGE_kmod-fs-exfat=y
+CONFIG_PACKAGE_kmod-fs-ntfs3=y
+CONFIG_PACKAGE_kmod-nls-cp437=y
+CONFIG_PACKAGE_kmod-nls-iso8859-1=y
+CONFIG_PACKAGE_kmod-nls-utf8=y
+CONFIG_PACKAGE_e2fsprogs=y
+CONFIG_PACKAGE_dosfstools=y
+# --- VPN ---
+CONFIG_PACKAGE_kmod-wireguard=y
+CONFIG_PACKAGE_wireguard-tools=y
+CONFIG_PACKAGE_luci-proto-wireguard=y
+CONFIG_PACKAGE_qrencode=y
+CONFIG_PACKAGE_openvpn-mbedtls=y
+CONFIG_PACKAGE_luci-app-openvpn=y
+# --- ИБП (NUT) ---
+CONFIG_PACKAGE_nut=y
+CONFIG_PACKAGE_nut-server=y
+CONFIG_PACKAGE_nut-upsmon=y
+CONFIG_PACKAGE_nut-upsc=y
+CONFIG_PACKAGE_nut-driver-usbhid-ups=y
+CONFIG_PACKAGE_nut-driver-nutdrv_qx=y
+# CONFIG_NUT_DRIVER_NEON is not set
+# --- USB-модемы и раздача с телефона ---
+CONFIG_PACKAGE_kmod-usb-serial-option=y
+CONFIG_PACKAGE_kmod-usb-serial-wwan=y
+CONFIG_PACKAGE_kmod-usb-acm=y
+CONFIG_PACKAGE_kmod-usb-net-qmi-wwan=y
+CONFIG_PACKAGE_kmod-usb-net-cdc-ether=y
+CONFIG_PACKAGE_kmod-usb-net-rndis=y
+CONFIG_PACKAGE_kmod-usb-net-cdc-ncm=y
+CONFIG_PACKAGE_kmod-usb-net-huawei-cdc-ncm=y
+CONFIG_PACKAGE_kmod-usb-net-cdc-mbim=y
+CONFIG_PACKAGE_usb-modeswitch=y
+CONFIG_PACKAGE_comgt=y
+CONFIG_PACKAGE_comgt-ncm=y
+CONFIG_PACKAGE_uqmi=y
+CONFIG_PACKAGE_umbim=y
+CONFIG_PACKAGE_luci-proto-3g=y
+CONFIG_PACKAGE_luci-proto-qmi=y
+CONFIG_PACKAGE_luci-proto-ncm=y
+CONFIG_PACKAGE_luci-proto-mbim=y
+# --- UPnP и триггеры светодиодов ---
+CONFIG_PACKAGE_miniupnpd-nftables=y
+CONFIG_PACKAGE_luci-app-upnp=y
+CONFIG_PACKAGE_kmod-ledtrig-activity=y
+CONFIG_PACKAGE_kmod-ledtrig-oneshot=y
+CONFIG_PACKAGE_kmod-ledtrig-pattern=y
+# --- статистика трафика ---
+CONFIG_PACKAGE_nlbwmon=y
+CONFIG_PACKAGE_luci-app-nlbwmon=y
+# --- DNS через HTTPS ---
+CONFIG_PACKAGE_https-dns-proxy=y
+CONFIG_PACKAGE_luci-app-https-dns-proxy=y
+# --- утилиты ---
+CONFIG_PACKAGE_curl=y
+CONFIG_PACKAGE_htop=y
+CONFIG_PACKAGE_nano=y
+CONFIG_PACKAGE_iperf3=y
+CONFIG_PACKAGE_watchcat=y
+CONFIG_PACKAGE_luci-app-watchcat=y
+CONFIG_PACKAGE_etherwake=y
+CONFIG_PACKAGE_luci-app-wol=y
+# --- USB-принтер (p910nd, порт 9100) ---
+CONFIG_PACKAGE_kmod-usb-printer=y
+CONFIG_PACKAGE_p910nd=y
+CONFIG_PACKAGE_luci-app-p910nd=y
+# --- доступ к регистрам свитча (проверка гашения LED портов) ---
+CONFIG_PACKAGE_mdio-tools=y
+CONFIG_PACKAGE_tgnotify=y
+CONFIG_PACKAGE_luci-app-tgnotify=y
+# --- VPN по доменам (pbr) ---
+CONFIG_PACKAGE_ip-full=y
+# CONFIG_PACKAGE_ip-tiny is not set
+CONFIG_PACKAGE_dnsmasq-full=y
+# CONFIG_PACKAGE_dnsmasq is not set
+CONFIG_PACKAGE_pbr=y
+CONFIG_PACKAGE_luci-app-pbr=y
+# --- свои плагины: расписание Wi-Fi, диоды и кнопка WPS ---
+CONFIG_PACKAGE_wifitimer=y
+CONFIG_PACKAGE_luci-app-wifitimer=y
+CONFIG_PACKAGE_ledtimer=y
+CONFIG_PACKAGE_luci-app-ledtimer=y
+# --- название сборки (Image configuration -> Version configuration options) ---
+CONFIG_IMAGEOPT=y
+CONFIG_VERSIONOPT=y
+CONFIG_VERSION_DIST="Vinga-WRT"
+CONFIG_VERSION_MANUFACTURER="Ironglass"
+CONFIG_VERSION_MANUFACTURER_URL="https://ironglass.com.ua"
+CONFIG_VERSION_HOME_URL="https://github.com/ironglass-lab/openwrt-vinga-wr-ac1210gu"
+CONFIG_VERSION_SUPPORT_URL="https://github.com/ironglass-lab/openwrt-vinga-wr-ac1210gu/issues"

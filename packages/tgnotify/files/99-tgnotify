@@ -1,0 +1,12 @@
+# Telegram: сообщение при подключении WAN (wan — PPPoE/DHCP, wwan — модем/телефон)
+[ "$ACTION" = ifup ] || exit 0
+case "$INTERFACE" in wan|wwan) ;; *) exit 0 ;; esac
+[ "$(uci -q get tgnotify.main.enabled)" = 1 ] || exit 0
+[ "$(uci -q get tgnotify.main.wan_up)" = 1 ] || exit 0
+(
+	sleep 10	# дать подняться DNS и маршрутам
+	. /lib/functions/network.sh
+	network_flush_cache
+	network_get_ipaddr ip "$INTERFACE"
+	/usr/bin/tg_say "WAN ($INTERFACE) подключён, IP ${ip:-?}"
+) </dev/null >/dev/null 2>&1 &

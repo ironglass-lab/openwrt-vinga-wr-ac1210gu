@@ -1,0 +1,34 @@
+# Дерево OpenWrt и результаты сборки
+/openwrt/
+*.bin
+*.trx
+*.img
+*.apk
+*.ipk
+*.sqsh
+*.tar.gz
+*.zip
+
+# Дампы, резервные копии, Factory — личное, не публикуем
+backup/
+*backup*
+*.CFG
+*.TBZ
+home_openwrt_setup.sh
+
+# Секреты
+*.ovpn
+*.auth
+*.key
+*.pem
+*.crt
+*.p12
+
+# Черновики и рабочие копии
+diffconfig.full
+diffconfig.A
+files.off/
+*.orig
+*.rej
+*~
+.*.swp

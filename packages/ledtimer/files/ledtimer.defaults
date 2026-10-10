@@ -1,0 +1,10 @@
+#!/bin/sh
+# секция кнопки WPS для конфигов, созданных до её появления
+uci -q get ledtimer.wps >/dev/null || {
+	uci set ledtimer.wps=button
+	uci set ledtimer.wps.enabled=0
+	uci set ledtimer.wps.short=leds
+	uci set ledtimer.wps.long=wifi2g
+	uci commit ledtimer
+}
+exit 0

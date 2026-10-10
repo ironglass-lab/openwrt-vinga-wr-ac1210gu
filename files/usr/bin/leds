@@ -1,0 +1,56 @@
+#!/bin/sh
+# leds on|off|toggle — все управляемые светодиоды (аналог leds_front + leds_ether на padavan)
+# /sys/class/leds: сохраняет trigger/яркость/USB-порты в /tmp/leds.off
+# диоды портов LAN/WAN (PHY MT7530, MMD 31, LED0): off = 0xc000/0x0000, on = штатные 0xc007/0x003f
+S=/tmp/leds.off
+P=/tmp/leds.phy
+BUS=mt7530-0
+
+phy_set() {
+	command -v mdio >/dev/null || return
+	for n in 0 1 2 3 4; do
+		mdio $BUS mmd-c22 $n:31 raw 0x24 $1 </dev/null
+		mdio $BUS mmd-c22 $n:31 raw 0x25 $2 </dev/null
+	done
+}
+
+off() {
+	[ -e $S ] && return
+	for l in /sys/class/leds/*; do
+		n=${l##*/}
+		t=$(sed 's/.*\[\(.*\)\].*/\1/' $l/trigger)
+		b=$(cat $l/brightness)
+		p=
+		[ -d $l/ports ] && for f in $l/ports/*; do [ "$(cat $f)" = 1 ] && p="$p ${f##*/}"; done
+		echo "$n $t $b$p" >> $S
+		echo none > $l/trigger
+		echo 0 > $l/brightness
+	done
+	phy_set 0xc000 0x0000 && touch $P
+	logger -t leds off
+}
+
+on() {
+	# порты возвращаются в штатное состояние всегда, даже без файлов состояния
+	[ -e $S ] && while read n t b p; do
+		l=/sys/class/leds/$n
+		[ -d $l ] || continue
+		echo "$t" > $l/trigger
+		# phyXradio и др. не выставляют яркость сами — вернуть сохранённую;
+		# 0 при активном триггере не пишем (запись 0 снимает триггер)
+		if [ "$t" = none ] || [ "$b" != 0 ]; then echo "$b" > $l/brightness; fi
+		for x in $p; do echo 1 > $l/ports/$x; done
+	done < $S
+	rm -f $S
+	phy_set 0xc007 0x003f
+	rm -f $P
+	logger -t leds on
+}
+
+case "$1" in
+	on) on ;;
+	off) off ;;
+	toggle) if [ -e $S ]; then on; else off; fi ;;
+	*) echo "usage: leds on|off|toggle"; exit 1 ;;
+esac
+exit 0

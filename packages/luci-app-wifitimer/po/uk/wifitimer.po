@@ -1,0 +1,86 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: uk\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgid "Wi-Fi schedule"
+msgstr "Розклад Wi-Fi"
+
+msgid "Turns off selected Wi-Fi networks for a period of time and turns them back on. Other networks keep working, for example 2.4 GHz for smart-home devices."
+msgstr "Вимикає вибрані Wi-Fi мережі на заданий час і потім вмикає назад. Інші мережі продовжують працювати, наприклад 2.4 ГГц для розумного дому."
+
+msgid "Enable schedule"
+msgstr "Увімкнути розклад"
+
+msgid "Networks now"
+msgstr "Мережі зараз"
+
+msgid "working"
+msgstr "працює"
+
+msgid "turned off"
+msgstr "вимкнена"
+
+msgid "turned off by schedule"
+msgstr "вимкнена за розкладом"
+
+msgid "Rules"
+msgstr "Правила"
+
+msgid "The network is off from «Off at» until «On at». If «On at» is earlier, the period crosses midnight. Days are the days the off period starts. A network switched by hand stays so until the next scheduled switch."
+msgstr "Мережа вимкнена з «Вимкнути о» до «Увімкнути о». Якщо «Увімкнути о» раніше, період переходить через північ. Дні — дні початку періоду вимкнення. Мережу, увімкнену чи вимкнену вручну, таймер не чіпає до наступного перемикання за розкладом."
+
+msgid "Enabled"
+msgstr "Увімкнено"
+
+msgid "Network"
+msgstr "Мережа"
+
+msgid "Days"
+msgstr "Дні"
+
+msgid "Off at"
+msgstr "Вимкнути о"
+
+msgid "On at"
+msgstr "Увімкнути о"
+
+msgid "Time as HH:MM, e.g. 01:00"
+msgstr "Час у вигляді ГГ:ХХ, наприклад 01:00"
+
+msgid "«Off at» and «On at» must differ"
+msgstr "«Вимкнути о» і «Увімкнути о» мають відрізнятися"
+
+msgid "Mon"
+msgstr "Пн"
+
+msgid "Tue"
+msgstr "Вт"
+
+msgid "Wed"
+msgstr "Ср"
+
+msgid "Thu"
+msgstr "Чт"
+
+msgid "Fri"
+msgstr "Пт"
+
+msgid "Sat"
+msgstr "Сб"
+
+msgid "Sun"
+msgstr "Нд"
+
+msgid "2.4 GHz"
+msgstr "2.4 ГГц"
+
+msgid "5 GHz"
+msgstr "5 ГГц"
+
+msgid "6 GHz"
+msgstr "6 ГГц"
+
+msgid "Grant access to Wi-Fi schedule"
+msgstr "Доступ до розкладу Wi-Fi"

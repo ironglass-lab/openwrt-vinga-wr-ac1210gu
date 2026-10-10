@@ -1,0 +1,20 @@
+{
+	"luci-app-ledtimer": {
+		"description": "Grant access to router LEDs and WPS button",
+		"read": {
+			"uci": [ "ledtimer" ],
+			"file": {
+				"/usr/bin/ledtimer status": [ "exec" ],
+				"/etc/wps-user.sh": [ "read" ]
+			}
+		},
+		"write": {
+			"uci": [ "ledtimer" ],
+			"file": {
+				"/usr/bin/leds on": [ "exec" ],
+				"/usr/bin/leds off": [ "exec" ],
+				"/etc/wps-user.sh": [ "write" ]
+			}
+		}
+	}
+}

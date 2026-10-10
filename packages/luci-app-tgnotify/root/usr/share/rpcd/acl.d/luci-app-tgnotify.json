@@ -1,0 +1,15 @@
+{
+	"luci-app-tgnotify": {
+		"description": "Grant access to Telegram notifications",
+		"read": {
+			"uci": [ "tgnotify" ]
+		},
+		"write": {
+			"uci": [ "tgnotify" ],
+			"file": {
+				"/usr/bin/tg_say": [ "exec" ],
+				"/usr/bin/tg_say *": [ "exec" ]
+			}
+		}
+	}
+}

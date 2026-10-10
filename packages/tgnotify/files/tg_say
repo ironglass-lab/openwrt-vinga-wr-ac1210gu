@@ -1,0 +1,30 @@
+#!/bin/sh
+# tg_say "текст"     — отправить сообщение в Telegram (если включено)
+# tg_say -t "текст"  — тест: отправить даже при выключенных уведомлениях
+. /lib/functions.sh
+config_load tgnotify
+config_get_bool en main enabled 0
+config_get token main token
+config_get chat main chat_id
+
+force=0
+[ "$1" = "-t" ] && { force=1; shift; }
+[ "$en" = 1 ] || [ "$force" = 1 ] || exit 0
+if [ -z "$token" ] || [ -z "$chat" ]; then
+	echo "tgnotify: не заданы token или chat_id" >&2
+	exit 1
+fi
+
+msg="[$(cat /proc/sys/kernel/hostname)] $*"
+i=0
+while [ $i -lt 3 ]; do
+	# адрес с токеном отдаём curl через stdin, чтобы токен не светился в ps
+	out=$(printf 'url = "https://api.telegram.org/bot%s/sendMessage"\n' "$token" |
+		curl -sS -m 15 -K - --data-urlencode "chat_id=$chat" --data-urlencode "text=$msg" 2>&1)
+	case "$out" in *'"ok":true'*) exit 0 ;; esac
+	i=$((i + 1))
+	[ $i -lt 3 ] && sleep 5
+done
+logger -t tgnotify "ошибка отправки: $(echo "$out" | head -c 200)"
+echo "$out" >&2
+exit 1

@@ -1,0 +1,14 @@
+{
+	"admin/services/ledtimer": {
+		"title": "LEDs and button",
+		"order": 92,
+		"action": {
+			"type": "view",
+			"path": "ledtimer"
+		},
+		"depends": {
+			"acl": [ "luci-app-ledtimer" ],
+			"uci": { "ledtimer": true }
+		}
+	}
+}

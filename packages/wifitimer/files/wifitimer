@@ -1,0 +1,180 @@
+#!/bin/sh
+# wifitimer — выключение отдельных Wi-Fi сетей по расписанию
+#   wifitimer check    — одна проверка расписания
+#   wifitimer daemon   — проверка раз в минуту (запускает /etc/init.d/wifitimer)
+#   wifitimer restore  — включить сети, которые выключил таймер
+#   wifitimer status   — состояние сетей (для LuCI): ssid|band|on/off|timer
+#
+# Логика: правило задаёт период «выкл с off_time до on_time» в выбранные дни
+# (день = день начала периода, период может переходить через полночь).
+# Таймер действует только на переходах: сеть, включённую или выключенную
+# вручную, он не трогает до следующего переключения по расписанию.
+# Включает он только те сети, которые выключил сам (список в $OWNED).
+
+. /lib/functions.sh
+
+STATE=/tmp/wifitimer.state	# iface=on|off — последнее желаемое состояние
+OWNED=/etc/wifitimer.owned	# сети, выключенные таймером (переживает перезагрузку)
+
+log() { logger -t wifitimer "$*"; }
+
+num() { local n="${1#0}"; echo "${n:-0}"; }
+
+hm2min() {	# "HH:MM" -> минуты от полуночи
+	case "$1" in
+		[0-9]:[0-5][0-9]|[01][0-9]:[0-5][0-9]|2[0-3]:[0-5][0-9]) ;;
+		*) return 1 ;;
+	esac
+	echo $(( $(num "${1%%:*}") * 60 + $(num "${1##*:}") ))
+}
+
+daynum() {
+	case "$1" in
+		mon) echo 1 ;; tue) echo 2 ;; wed) echo 3 ;; thu) echo 4 ;;
+		fri) echo 5 ;; sat) echo 6 ;; sun) echo 7 ;;
+	esac
+}
+
+# is_off NOW TODAY YDAY OFF ON "DAYS" -> 0, если сейчас период выключения
+is_off() {
+	local now=$1 today=$2 yday=$3 off=$4 on=$5 days="$6" d t=0 y=0
+	for d in $days; do
+		d=$(daynum "$d")
+		[ "$d" = "$today" ] && t=1
+		[ "$d" = "$yday" ] && y=1
+	done
+	if [ "$off" -lt "$on" ]; then
+		[ $t = 1 ] && [ "$now" -ge "$off" ] && [ "$now" -lt "$on" ]
+	else
+		{ [ $t = 1 ] && [ "$now" -ge "$off" ]; } || { [ $y = 1 ] && [ "$now" -lt "$on" ]; }
+	fi
+}
+
+check_rule() {
+	local s="$1" en iface off on days
+	config_get_bool en "$s" enabled 0
+	[ "$en" = 1 ] || return 0
+	config_get iface "$s" iface
+	[ -n "$iface" ] || return 0
+	config_get off "$s" off_time
+	config_get on "$s" on_time
+	off=$(hm2min "$off") || return 0
+	on=$(hm2min "$on") || return 0
+	[ "$off" != "$on" ] || return 0
+	config_get days "$s" days "mon tue wed thu fri sat sun"
+	MANAGED="$MANAGED $iface"
+	is_off "$NOW" "$TODAY" "$YDAY" "$off" "$on" "$days" && WANT_OFF="$WANT_OFF $iface"
+	return 0
+}
+
+owned_has() { grep -qx "$1" "$OWNED" 2>/dev/null; }
+owned_add() { owned_has "$1" || echo "$1" >> "$OWNED"; }
+owned_del() {
+	[ -f "$OWNED" ] || return 0
+	grep -vx "$1" "$OWNED" > "$OWNED.new"
+	if [ -s "$OWNED.new" ]; then mv "$OWNED.new" "$OWNED"; else rm -f "$OWNED" "$OWNED.new"; fi
+}
+
+save_state() {
+	{ grep -v "^$1=" "$STATE" 2>/dev/null; echo "$1=$2"; } > "$STATE.new"
+	mv "$STATE.new" "$STATE"
+}
+
+# set_state IFACE on|off -> 0, если конфиг изменён
+set_state() {
+	local i="$1" want="$2" cur ssid
+	if ! uci -q get "wireless.$i" >/dev/null; then
+		owned_del "$i"
+		return 1
+	fi
+	cur=$(uci -q get "wireless.$i.disabled"); [ "$cur" = 1 ] || cur=0
+	ssid=$(uci -q get "wireless.$i.ssid")
+	if [ "$want" = off ]; then
+		[ "$cur" = 1 ] && return 1		# уже выключена (вручную) — не наша
+		uci set "wireless.$i.disabled=1"
+		owned_add "$i"
+		log "выключена сеть ${ssid:-$i} (расписание Wi-Fi)"
+	else
+		owned_has "$i" || return 1		# включаем только то, что выключили сами
+		owned_del "$i"
+		[ "$cur" = 0 ] && return 1		# уже включили вручную
+		uci set "wireless.$i.disabled=0"
+		log "включена сеть ${ssid:-$i} (расписание Wi-Fi)"
+	fi
+	return 0
+}
+
+apply() {
+	uci commit wireless
+	wifi reload
+}
+
+do_check() {
+	local en i want prev changed=0
+	[ "$(date +%Y)" -ge 2025 ] || return 0	# время ещё не синхронизировано (NTP)
+	NOW=$(( $(num "$(date +%H)") * 60 + $(num "$(date +%M)") ))
+	TODAY=$(date +%u)
+	YDAY=$(( TODAY == 1 ? 7 : TODAY - 1 ))
+	MANAGED= WANT_OFF=
+	config_load wifitimer
+	config_get_bool en main enabled 0
+	[ "$en" = 1 ] && config_foreach check_rule rule
+
+	for i in $(echo $MANAGED | tr ' ' '\n' | sort -u); do
+		want=on
+		case " $WANT_OFF " in *" $i "*) want=off ;; esac
+		prev=$(sed -n "s/^$i=//p" "$STATE" 2>/dev/null)
+		[ "$want" = "$prev" ] && continue	# нет перехода
+		set_state "$i" "$want" && changed=1
+		save_state "$i" "$want"
+	done
+
+	# выключенные таймером, но больше не в расписании — вернуть
+	for i in $(cat "$OWNED" 2>/dev/null); do
+		case " $MANAGED " in *" $i "*) continue ;; esac
+		set_state "$i" on && changed=1
+	done
+
+	[ $changed = 1 ] && apply
+	return 0
+}
+
+do_restore() {
+	local i changed=0
+	for i in $(cat "$OWNED" 2>/dev/null); do
+		set_state "$i" on && changed=1
+	done
+	rm -f "$STATE"
+	[ $changed = 1 ] && apply
+	return 0
+}
+
+st_iface() {
+	local s="$1" ssid dev band dis tm=0
+	config_get ssid "$s" ssid "$s"
+	config_get dev "$s" device
+	config_get band "$dev" band
+	config_get_bool dis "$s" disabled 0
+	owned_has "$s" && tm=1
+	[ "$dis" = 1 ] && dis=off || dis=on
+	echo "$s|$ssid|$band|$dis|$tm"
+}
+
+do_status() {
+	config_load wireless
+	config_foreach st_iface wifi-iface
+}
+
+case "$1" in
+	check) do_check ;;
+	restore) do_restore ;;
+	status) do_status ;;
+	daemon)
+		rm -f "$STATE"
+		while :; do
+			do_check
+			sleep $(( 60 - $(num "$(date +%S)") ))
+		done
+		;;
+	*) echo "usage: $0 check|daemon|restore|status" >&2; exit 1 ;;
+esac

@@ -1,0 +1,137 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgid "Turns off all router LEDs, including the LAN/WAN port LEDs, by button or on schedule. The short press of the WPS button also toggles them."
+msgstr "Гасит все диоды роутера, включая диоды портов LAN/WAN, кнопкой здесь или по расписанию. Короткое нажатие кнопки WPS тоже их переключает."
+
+msgid "Now"
+msgstr "Сейчас"
+
+msgid "State"
+msgstr "Состояние"
+
+msgid "LEDs are on"
+msgstr "диоды горят"
+
+msgid "LEDs are off"
+msgstr "диоды погашены"
+
+msgid "Turn all off"
+msgstr "Погасить все"
+
+msgid "Turn off"
+msgstr "Погасить"
+
+msgid "Turn all on"
+msgstr "Зажечь все"
+
+msgid "Turn on"
+msgstr "Зажечь"
+
+msgid "Schedule"
+msgstr "Расписание"
+
+msgid "LEDs are off from «Off at» until «On at». If «On at» is earlier, the period crosses midnight. Days are the days the off period starts. LEDs switched by hand stay so until the next scheduled switch."
+msgstr "Диоды погашены с «Выключить в» до «Включить в». Если «Включить в» раньше, период переходит через полночь. Дни — дни начала периода. Диоды, зажжённые или погашенные вручную, остаются так до следующего переключения по расписанию."
+
+msgid "Enable schedule"
+msgstr "Включить расписание"
+
+msgid "Days"
+msgstr "Дни"
+
+msgid "Off at"
+msgstr "Выключить в"
+
+msgid "On at"
+msgstr "Включить в"
+
+msgid "Time as HH:MM, e.g. 01:00"
+msgstr "Время в виде ЧЧ:ММ, например 01:00"
+
+msgid "«Off at» and «On at» must differ"
+msgstr "«Выключить в» и «Включить в» должны различаться"
+
+msgid "Mon"
+msgstr "Пн"
+
+msgid "Tue"
+msgstr "Вт"
+
+msgid "Wed"
+msgstr "Ср"
+
+msgid "Thu"
+msgstr "Чт"
+
+msgid "Fri"
+msgstr "Пт"
+
+msgid "Sat"
+msgstr "Сб"
+
+msgid "Sun"
+msgstr "Вс"
+
+msgid "Grant access to router LEDs"
+msgstr "Доступ к диодам роутера"
+
+msgid "LEDs and button"
+msgstr "Диоды и кнопка"
+
+msgid "Turns off all router LEDs, including the LAN/WAN port LEDs, by button or on schedule, and sets what the WPS button does."
+msgstr "Гасит все диоды роутера, включая диоды портов LAN/WAN, кнопкой здесь или по расписанию, и задаёт, что делает кнопка WPS."
+
+msgid "WPS button"
+msgstr "Кнопка WPS"
+
+msgid "Short press is under 2 s; long press is 2–8 s (the WPS LED starts blinking at 2 s). Longer presses do nothing. When control is off, the firmware default is used: short press toggles LEDs, long press toggles 2.4 GHz."
+msgstr "Короткое нажатие — меньше 2 с; длинное — 2–8 с (через 2 с диод WPS начинает мигать). Дольше 8 с — ничего. Если управление выключено, работает штатное поведение прошивки: коротко — диоды, длинно — 2.4 ГГц."
+
+msgid "Control the button here"
+msgstr "Управлять кнопкой здесь"
+
+msgid "Short press"
+msgstr "Короткое нажатие"
+
+msgid "Long press"
+msgstr "Длинное нажатие (2–8 с)"
+
+msgid "User script"
+msgstr "Свой скрипт"
+
+msgid "Saved as /etc/wps-user.sh and run with sh in the background."
+msgstr "Сохраняется в /etc/wps-user.sh и запускается через sh в фоне."
+
+msgid "Nothing"
+msgstr "Ничего"
+
+msgid "LEDs on/off"
+msgstr "Диоды вкл/выкл"
+
+msgid "Wi-Fi 2.4 GHz on/off"
+msgstr "Wi-Fi 2.4 ГГц вкл/выкл"
+
+msgid "Wi-Fi 5 GHz on/off"
+msgstr "Wi-Fi 5 ГГц вкл/выкл"
+
+msgid "All Wi-Fi on/off"
+msgstr "Весь Wi-Fi вкл/выкл"
+
+msgid "OpenVPN on/off"
+msgstr "OpenVPN вкл/выкл"
+
+msgid "Reconnect WAN"
+msgstr "Переподключить WAN"
+
+msgid "Reboot router"
+msgstr "Перезагрузить роутер"
+
+msgid "Run user script"
+msgstr "Запустить свой скрипт"
+
+msgid "Grant access to router LEDs and WPS button"
+msgstr "Доступ к диодам и кнопке WPS"

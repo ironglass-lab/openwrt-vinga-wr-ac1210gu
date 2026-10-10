@@ -1,0 +1,137 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: uk\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgid "Turns off all router LEDs, including the LAN/WAN port LEDs, by button or on schedule. The short press of the WPS button also toggles them."
+msgstr "Гасить усі діоди роутера, включно з діодами портів LAN/WAN, кнопкою тут або за розкладом. Коротке натискання кнопки WPS теж їх перемикає."
+
+msgid "Now"
+msgstr "Зараз"
+
+msgid "State"
+msgstr "Стан"
+
+msgid "LEDs are on"
+msgstr "діоди світяться"
+
+msgid "LEDs are off"
+msgstr "діоди погашені"
+
+msgid "Turn all off"
+msgstr "Погасити всі"
+
+msgid "Turn off"
+msgstr "Погасити"
+
+msgid "Turn all on"
+msgstr "Увімкнути всі"
+
+msgid "Turn on"
+msgstr "Увімкнути"
+
+msgid "Schedule"
+msgstr "Розклад"
+
+msgid "LEDs are off from «Off at» until «On at». If «On at» is earlier, the period crosses midnight. Days are the days the off period starts. LEDs switched by hand stay so until the next scheduled switch."
+msgstr "Діоди погашені з «Вимкнути о» до «Увімкнути о». Якщо «Увімкнути о» раніше, період переходить через північ. Дні — дні початку періоду. Діоди, увімкнені чи погашені вручну, лишаються так до наступного перемикання за розкладом."
+
+msgid "Enable schedule"
+msgstr "Увімкнути розклад"
+
+msgid "Days"
+msgstr "Дні"
+
+msgid "Off at"
+msgstr "Вимкнути о"
+
+msgid "On at"
+msgstr "Увімкнути о"
+
+msgid "Time as HH:MM, e.g. 01:00"
+msgstr "Час у вигляді ГГ:ХХ, наприклад 01:00"
+
+msgid "«Off at» and «On at» must differ"
+msgstr "«Вимкнути о» і «Увімкнути о» мають відрізнятися"
+
+msgid "Mon"
+msgstr "Пн"
+
+msgid "Tue"
+msgstr "Вт"
+
+msgid "Wed"
+msgstr "Ср"
+
+msgid "Thu"
+msgstr "Чт"
+
+msgid "Fri"
+msgstr "Пт"
+
+msgid "Sat"
+msgstr "Сб"
+
+msgid "Sun"
+msgstr "Нд"
+
+msgid "Grant access to router LEDs"
+msgstr "Доступ до діодів роутера"
+
+msgid "LEDs and button"
+msgstr "Діоди та кнопка"
+
+msgid "Turns off all router LEDs, including the LAN/WAN port LEDs, by button or on schedule, and sets what the WPS button does."
+msgstr "Гасить усі діоди роутера, включно з діодами портів LAN/WAN, кнопкою тут або за розкладом, і задає, що робить кнопка WPS."
+
+msgid "WPS button"
+msgstr "Кнопка WPS"
+
+msgid "Short press is under 2 s; long press is 2–8 s (the WPS LED starts blinking at 2 s). Longer presses do nothing. When control is off, the firmware default is used: short press toggles LEDs, long press toggles 2.4 GHz."
+msgstr "Коротке натискання — менше 2 с; довге — 2–8 с (через 2 с діод WPS починає блимати). Довше 8 с — нічого. Якщо керування вимкнене, працює штатна поведінка прошивки: коротко — діоди, довго — 2.4 ГГц."
+
+msgid "Control the button here"
+msgstr "Керувати кнопкою тут"
+
+msgid "Short press"
+msgstr "Коротке натискання"
+
+msgid "Long press"
+msgstr "Довге натискання (2–8 с)"
+
+msgid "User script"
+msgstr "Свій скрипт"
+
+msgid "Saved as /etc/wps-user.sh and run with sh in the background."
+msgstr "Зберігається в /etc/wps-user.sh і запускається через sh у фоні."
+
+msgid "Nothing"
+msgstr "Нічого"
+
+msgid "LEDs on/off"
+msgstr "Діоди увімк/вимк"
+
+msgid "Wi-Fi 2.4 GHz on/off"
+msgstr "Wi-Fi 2.4 ГГц увімк/вимк"
+
+msgid "Wi-Fi 5 GHz on/off"
+msgstr "Wi-Fi 5 ГГц увімк/вимк"
+
+msgid "All Wi-Fi on/off"
+msgstr "Весь Wi-Fi увімк/вимк"
+
+msgid "OpenVPN on/off"
+msgstr "OpenVPN увімк/вимк"
+
+msgid "Reconnect WAN"
+msgstr "Перепідключити WAN"
+
+msgid "Reboot router"
+msgstr "Перезавантажити роутер"
+
+msgid "Run user script"
+msgstr "Запустити свій скрипт"
+
+msgid "Grant access to router LEDs and WPS button"
+msgstr "Доступ до діодів і кнопки WPS"

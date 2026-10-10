@@ -1,0 +1,14 @@
+{
+	"luci-app-wifitimer": {
+		"description": "Grant access to Wi-Fi schedule",
+		"read": {
+			"uci": [ "wifitimer", "wireless" ],
+			"file": {
+				"/usr/bin/wifitimer status": [ "exec" ]
+			}
+		},
+		"write": {
+			"uci": [ "wifitimer" ]
+		}
+	}
+}

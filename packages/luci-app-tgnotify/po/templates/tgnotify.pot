@@ -1,0 +1,48 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Telegram notifications"
+msgstr ""
+
+msgid "Messages from the router to Telegram. Create a bot with @BotFather, write anything to it, then get your chat ID from @userinfobot."
+msgstr ""
+
+msgid "Enable"
+msgstr ""
+
+msgid "Bot token"
+msgstr ""
+
+msgid "Chat ID"
+msgstr ""
+
+msgid "Number or @channel"
+msgstr ""
+
+msgid "Notify when WAN connects"
+msgstr ""
+
+msgid "Notify on SSH login"
+msgstr ""
+
+msgid "Test message"
+msgstr ""
+
+msgid "Click «Save & Apply» first, then send a test."
+msgstr ""
+
+msgid "Send test"
+msgstr ""
+
+msgid "Test message from LuCI"
+msgstr ""
+
+msgid "Message sent"
+msgstr ""
+
+msgid "Sending failed: %s"
+msgstr ""
+
+msgid "Grant access to Telegram notifications"
+msgstr ""

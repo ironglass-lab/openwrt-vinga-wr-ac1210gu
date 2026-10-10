@@ -1,0 +1,135 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Turns off all router LEDs, including the LAN/WAN port LEDs, by button or on schedule. The short press of the WPS button also toggles them."
+msgstr ""
+
+msgid "Now"
+msgstr ""
+
+msgid "State"
+msgstr ""
+
+msgid "LEDs are on"
+msgstr ""
+
+msgid "LEDs are off"
+msgstr ""
+
+msgid "Turn all off"
+msgstr ""
+
+msgid "Turn off"
+msgstr ""
+
+msgid "Turn all on"
+msgstr ""
+
+msgid "Turn on"
+msgstr ""
+
+msgid "Schedule"
+msgstr ""
+
+msgid "LEDs are off from «Off at» until «On at». If «On at» is earlier, the period crosses midnight. Days are the days the off period starts. LEDs switched by hand stay so until the next scheduled switch."
+msgstr ""
+
+msgid "Enable schedule"
+msgstr ""
+
+msgid "Days"
+msgstr ""
+
+msgid "Off at"
+msgstr ""
+
+msgid "On at"
+msgstr ""
+
+msgid "Time as HH:MM, e.g. 01:00"
+msgstr ""
+
+msgid "«Off at» and «On at» must differ"
+msgstr ""
+
+msgid "Mon"
+msgstr ""
+
+msgid "Tue"
+msgstr ""
+
+msgid "Wed"
+msgstr ""
+
+msgid "Thu"
+msgstr ""
+
+msgid "Fri"
+msgstr ""
+
+msgid "Sat"
+msgstr ""
+
+msgid "Sun"
+msgstr ""
+
+msgid "Grant access to router LEDs"
+msgstr ""
+
+msgid "LEDs and button"
+msgstr ""
+
+msgid "Turns off all router LEDs, including the LAN/WAN port LEDs, by button or on schedule, and sets what the WPS button does."
+msgstr ""
+
+msgid "WPS button"
+msgstr ""
+
+msgid "Short press is under 2 s; long press is 2–8 s (the WPS LED starts blinking at 2 s). Longer presses do nothing. When control is off, the firmware default is used: short press toggles LEDs, long press toggles 2.4 GHz."
+msgstr ""
+
+msgid "Control the button here"
+msgstr ""
+
+msgid "Short press"
+msgstr ""
+
+msgid "Long press"
+msgstr ""
+
+msgid "User script"
+msgstr ""
+
+msgid "Saved as /etc/wps-user.sh and run with sh in the background."
+msgstr ""
+
+msgid "Nothing"
+msgstr ""
+
+msgid "LEDs on/off"
+msgstr ""
+
+msgid "Wi-Fi 2.4 GHz on/off"
+msgstr ""
+
+msgid "Wi-Fi 5 GHz on/off"
+msgstr ""
+
+msgid "All Wi-Fi on/off"
+msgstr ""
+
+msgid "OpenVPN on/off"
+msgstr ""
+
+msgid "Reconnect WAN"
+msgstr ""
+
+msgid "Reboot router"
+msgstr ""
+
+msgid "Run user script"
+msgstr ""
+
+msgid "Grant access to router LEDs and WPS button"
+msgstr ""

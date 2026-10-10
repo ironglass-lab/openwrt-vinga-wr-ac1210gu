@@ -1,0 +1,132 @@
+#!/bin/sh
+# ledtimer — гасит и зажигает все светодиоды по расписанию (через /usr/bin/leds)
+#   ledtimer check   — одна проверка расписания
+#   ledtimer daemon  — проверка раз в минуту (запускает /etc/init.d/ledtimer)
+#   ledtimer status  — on|off: горят ли диоды сейчас (для LuCI)
+#   ledtimer button ACTION — действие кнопки WPS (leds|wifi2g|wifi5g|wifiall|vpn|wan|reboot|script|none)
+#
+# Период «погасить с off_time до on_time» в выбранные дни (день = день начала
+# периода, через полночь можно). Действует только на переходах: диоды,
+# зажжённые или погашенные вручную (LuCI, кнопка WPS), остаются так до
+# следующего переключения по расписанию.
+
+. /lib/functions.sh
+
+STATE=/tmp/ledtimer.state
+LEDS=/usr/bin/leds
+
+num() { local n="${1#0}"; echo "${n:-0}"; }
+
+hm2min() {
+	case "$1" in
+		[0-9]:[0-5][0-9]|[01][0-9]:[0-5][0-9]|2[0-3]:[0-5][0-9]) ;;
+		*) return 1 ;;
+	esac
+	echo $(( $(num "${1%%:*}") * 60 + $(num "${1##*:}") ))
+}
+
+daynum() {
+	case "$1" in
+		mon) echo 1 ;; tue) echo 2 ;; wed) echo 3 ;; thu) echo 4 ;;
+		fri) echo 5 ;; sat) echo 6 ;; sun) echo 7 ;;
+	esac
+}
+
+is_off() {	# NOW TODAY YDAY OFF ON "DAYS"
+	local now=$1 today=$2 yday=$3 off=$4 on=$5 days="$6" d t=0 y=0
+	for d in $days; do
+		d=$(daynum "$d")
+		[ "$d" = "$today" ] && t=1
+		[ "$d" = "$yday" ] && y=1
+	done
+	if [ "$off" -lt "$on" ]; then
+		[ $t = 1 ] && [ "$now" -ge "$off" ] && [ "$now" -lt "$on" ]
+	else
+		{ [ $t = 1 ] && [ "$now" -ge "$off" ]; } || { [ $y = 1 ] && [ "$now" -lt "$on" ]; }
+	fi
+}
+
+do_check() {
+	local en off on days now today yday want prev
+	[ "$(date +%Y)" -ge 2025 ] || return 0	# время ещё не синхронизировано (NTP)
+	config_load ledtimer
+	config_get_bool en main enabled 0
+	[ "$en" = 1 ] || return 0
+	config_get off main off_time
+	config_get on main on_time
+	off=$(hm2min "$off") || return 0
+	on=$(hm2min "$on") || return 0
+	[ "$off" != "$on" ] || return 0
+	config_get days main days "mon tue wed thu fri sat sun"
+	now=$(( $(num "$(date +%H)") * 60 + $(num "$(date +%M)") ))
+	today=$(date +%u)
+	yday=$(( today == 1 ? 7 : today - 1 ))
+	want=on
+	is_off "$now" "$today" "$yday" "$off" "$on" "$days" && want=off
+	prev=$(cat "$STATE" 2>/dev/null)
+	[ "$want" = "$prev" ] && return 0	# нет перехода
+	echo "$want" > "$STATE"
+	# первый запуск днём: ничего не трогаем (после загрузки диоды и так горят,
+	# а погашенные вручную пусть остаются погашенными)
+	[ -z "$prev" ] && [ "$want" = on ] && return 0
+	$LEDS "$want" >/dev/null 2>&1
+	logger -t ledtimer "диоды: $want (расписание)"
+}
+
+radios_band() {	# 2g|5g|all -> секции радио
+	if [ "$1" = all ]; then
+		uci show wireless | sed -n "s/^wireless\.\([^.]*\)=wifi-device$/\1/p"
+	else
+		uci show wireless | sed -n "s/^wireless\.\([^.]*\)\.band='$1'$/\1/p"
+	fi
+}
+
+radio_toggle() {	# если хоть одно радио работает — выключить все, иначе включить
+	local r on=0 v name="$1"; shift
+	[ -n "$*" ] || return 0
+	for r in "$@"; do [ "$(uci -q get "wireless.$r.disabled")" = 1 ] || on=1; done
+	[ $on = 1 ] && v=1 || v=0
+	for r in "$@"; do uci set "wireless.$r.disabled=$v"; done
+	uci commit wireless
+	wifi reload
+	[ $v = 1 ] && logger -t wps-button "Wi-Fi $name выкл" || logger -t wps-button "Wi-Fi $name вкл"
+}
+
+do_button() {
+	case "$1" in
+		leds) $LEDS toggle ;;
+		wifi2g) radio_toggle 2.4G $(radios_band 2g) ;;
+		wifi5g) radio_toggle 5G $(radios_band 5g) ;;
+		wifiall) radio_toggle "2.4G+5G" $(radios_band all) ;;
+		vpn)
+			if pidof openvpn >/dev/null; then
+				/etc/init.d/openvpn stop; logger -t wps-button "VPN выкл"
+			else
+				/etc/init.d/openvpn start; logger -t wps-button "VPN вкл"
+			fi
+			;;
+		wan) logger -t wps-button "переподключение WAN"; ifup wan ;;
+		reboot) logger -t wps-button "перезагрузка"; reboot ;;
+		script)
+			[ -s /etc/wps-user.sh ] || return 0
+			logger -t wps-button "свой скрипт /etc/wps-user.sh"
+			( sh /etc/wps-user.sh ) </dev/null >/dev/null 2>&1 &
+			;;
+	esac
+}
+
+case "$1" in
+	check) do_check ;;
+	button) do_button "$2" ;;
+	status) [ -e /tmp/leds.off ] && echo off || echo on ;;
+	daemon)
+		[ -x "$LEDS" ] || { logger -t ledtimer "нет $LEDS"; exit 1; }
+		rm -f "$STATE"
+		sleep 90	# после загрузки дать системе выставить свои триггеры диодов
+		while :; do
+			do_check
+			sleep $(( 60 - $(num "$(date +%S)") ))
+		done
+		;;
+	*) echo "usage: $0 check|daemon|status|button ACTION" >&2; exit 1 ;;
+esac

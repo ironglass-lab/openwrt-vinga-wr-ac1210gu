@@ -1,0 +1,30 @@
+#!/bin/sh /etc/rc.common
+# Диоды по расписанию: при выключении расписания зажигает диоды, погашенные им
+
+START=99
+USE_PROCD=1
+PROG=/usr/bin/ledtimer
+
+start_service() {
+	local en
+	config_load ledtimer
+	config_get_bool en main enabled 0
+	if [ "$en" != 1 ]; then
+		[ "$(cat /tmp/ledtimer.state 2>/dev/null)" = off ] && /usr/bin/leds on >/dev/null 2>&1
+		rm -f /tmp/ledtimer.state
+		return 0
+	fi
+	procd_open_instance
+	procd_set_param command $PROG daemon
+	procd_set_param respawn
+	procd_close_instance
+}
+
+reload_service() {
+	stop
+	start
+}
+
+service_triggers() {
+	procd_add_reload_trigger ledtimer
+}

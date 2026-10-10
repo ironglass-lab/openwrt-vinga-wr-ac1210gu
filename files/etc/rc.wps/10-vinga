@@ -1,0 +1,16 @@
+#!/bin/sh
+# Vinga: кнопка WPS вместо WPS
+#   коротко (< 2 с) — все светодиоды вкл/выкл (как на padavan)
+#   2–8 с           — 2.4G вкл/выкл (сохраняется после перезагрузки)
+# exit 0 = обработано, стандартные 40-wps_ap/50-wps_sta не запускаются
+[ "$ACTION" = released ] || exit 0
+if [ "$SEEN" -lt 2 ]; then
+	/usr/bin/leds toggle
+elif [ "$SEEN" -le 8 ]; then
+	if [ "$(uci -q get wireless.radio0.disabled)" = 1 ]; then v=0; st=вкл; else v=1; st=выкл; fi
+	uci set wireless.radio0.disabled=$v
+	uci commit wireless
+	wifi reload
+	logger -t wps-button "2.4G $st"
+fi
+exit 0

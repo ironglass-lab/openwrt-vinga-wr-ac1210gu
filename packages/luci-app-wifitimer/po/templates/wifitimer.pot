@@ -1,0 +1,84 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Wi-Fi schedule"
+msgstr ""
+
+msgid "Turns off selected Wi-Fi networks for a period of time and turns them back on. Other networks keep working, for example 2.4 GHz for smart-home devices."
+msgstr ""
+
+msgid "Enable schedule"
+msgstr ""
+
+msgid "Networks now"
+msgstr ""
+
+msgid "working"
+msgstr ""
+
+msgid "turned off"
+msgstr ""
+
+msgid "turned off by schedule"
+msgstr ""
+
+msgid "Rules"
+msgstr ""
+
+msgid "The network is off from «Off at» until «On at». If «On at» is earlier, the period crosses midnight. Days are the days the off period starts. A network switched by hand stays so until the next scheduled switch."
+msgstr ""
+
+msgid "Enabled"
+msgstr ""
+
+msgid "Network"
+msgstr ""
+
+msgid "Days"
+msgstr ""
+
+msgid "Off at"
+msgstr ""
+
+msgid "On at"
+msgstr ""
+
+msgid "Time as HH:MM, e.g. 01:00"
+msgstr ""
+
+msgid "«Off at» and «On at» must differ"
+msgstr ""
+
+msgid "Mon"
+msgstr ""
+
+msgid "Tue"
+msgstr ""
+
+msgid "Wed"
+msgstr ""
+
+msgid "Thu"
+msgstr ""
+
+msgid "Fri"
+msgstr ""
+
+msgid "Sat"
+msgstr ""
+
+msgid "Sun"
+msgstr ""
+
+msgid "2.4 GHz"
+msgstr ""
+
+msgid "5 GHz"
+msgstr ""
+
+msgid "6 GHz"
+msgstr ""
+
+msgid "Grant access to Wi-Fi schedule"
+msgstr ""
