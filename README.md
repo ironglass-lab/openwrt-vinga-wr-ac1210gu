@@ -6,6 +6,9 @@ Unofficial build **based on OpenWrt 25.12.5**. It is not a product of the OpenWr
 not supported by it. Everything described here has been tested on two real routers, but you
 flash at your own risk.
 
+**Prebuilt image:** [Releases](https://github.com/ironglass-lab/openwrt-vinga-wr-ac1210gu/releases) — built from the tagged commit with `build.sh` in a fresh clone,
+checksums in `SHA256SUMS`. It still needs the 16 MB flash mod ([section 3](#3-board-modification-flash-chip)) and Breed ([section 5](#5-breed-bootloader)).
+
 ---
 
 ## Contents
@@ -311,7 +314,8 @@ cd openwrt-vinga-wr-ac1210gu
 bash build.sh
 ```
 
-`build.sh`: clones OpenWrt `v25.12.5` into `openwrt/`, applies the board patch, copies `files/`
+`build.sh`: sets `umask 022` (files in the image get 644/755 whatever your system umask is),
+clones OpenWrt `v25.12.5` into `openwrt/`, applies the board patch, copies `files/`
 (fixing permissions), copies `packages/` into `openwrt/package/`, updates feeds, puts
 `diffconfig` into `.config`, runs `make defconfig`, builds.
 
@@ -364,12 +368,33 @@ apk add --allow-untrusted /tmp/*wifitimer*.apk
 LuCI packages have version `0` (taken from git) — add `--force-reinstall` when updating.
 After changing a package's sources: `make package/<name>/clean`.
 
+### 9.6. Verifying an image
+
+Two builds of the same commit are never byte-identical (build paths, timestamps, the local package
+signing key), so compare the contents instead:
+
+```sh
+bash tools/compare-images.sh OLD-sysupgrade.bin NEW-sysupgrade.bin
+```
+
+The script unpacks both root filesystems and compares the package list, the set of files, file contents
+and permissions. For two builds of the same commit you should see:
+
+- identical packages and versions, the same set of files, no permission differences;
+- different content only in `/etc/apk/keys/public-key.pem` (every build tree has its own key),
+  `/lib/apk/db/*` and binaries that contain the build path (e.g. `mt76-connac-lib.ko`, `iperf3`, `libusb`).
+
+A build directory that has been used for many builds can leak leftovers from `staging_dir` into the
+image (e.g. a CA bundle with every certificate twice, NUT linked against libraries you never selected).
+Run `make clean` in `openwrt/` from time to time, and build release images from a fresh clone.
+
 ## 10. First flash and upgrades
 
 ### 10.1. First installation (via Breed)
 
 1. In Breed, take a full dump and Factory ([section 5](#5-breed-bootloader)).
-2. Breed → firmware update → **Firmware** → `…-squashfs-sysupgrade.bin` → update.
+2. Breed → firmware update → **Firmware** → `…-squashfs-sysupgrade.bin` (your build or the one from
+   [Releases](https://github.com/ironglass-lab/openwrt-vinga-wr-ac1210gu/releases)) → update.
 3. Wait 3–4 min. The WPS LED blinks during boot and goes off when the system is ready.
 4. `http://192.168.1.1`, login `root` with **no password** → set a password right away.
 5. Check DBDC ([6.2](#62-dbdc-mode--byte-0x3e)), the Wi-Fi country and power:
@@ -484,6 +509,7 @@ diffconfig                                             build configuration
 build.sh                                               build script
 files/                                                 custom firmware files (section 8.3)
 packages/                                              custom packages: tgnotify, wifitimer, ledtimer + LuCI
+tools/compare-images.sh                                compare two images (section 9.6)
 ```
 
 - Patch and dts: **GPL-2.0-or-later OR MIT** (as in the dts header; based on the JCG JHR-AC876M and
