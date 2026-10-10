@@ -30,6 +30,8 @@ fi
 rm -f build_dir/target-*/linux-ramips_mt7621/image-mt7621_vinga_wr-ac1210gu.dtb
 # свои пакеты (Telegram): копия из packages/ в дерево
 cp -r "$HERE/packages/." package/
+# права не берём из git-копии (Ubuntu даёт 664): убираем запись для группы и остальных
+for p in "$HERE"/packages/*/; do chmod -R go-w "package/$(basename "$p")"; done
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a
