@@ -2,7 +2,7 @@
 
 **Language:** **English** · [Українська](README.uk.md) · [Русский](README.ru.md)
 
-Unofficial build **based on OpenWrt 25.12.5**. It is not a product of the OpenWrt project and is
+Unofficial build **based on OpenWrt 25.12.6**. It is not a product of the OpenWrt project and is
 not supported by it. Everything described here has been tested on two real routers, but you
 flash at your own risk.
 
@@ -315,7 +315,7 @@ bash build.sh
 ```
 
 `build.sh`: sets `umask 022` (files in the image get 644/755 whatever your system umask is),
-clones OpenWrt `v25.12.5` into `openwrt/`, applies the board patch, copies `files/`
+clones OpenWrt `v25.12.6` into `openwrt/`, applies the board patch, copies `files/`
 (fixing permissions), copies `packages/` into `openwrt/package/`, updates feeds, puts
 `diffconfig` into `.config`, runs `make defconfig`, builds.
 
